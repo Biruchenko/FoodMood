@@ -1,0 +1,772 @@
+@use "sass:math";
+
+// Підключення міксинів ===========================================================================================================================================================================================================================================================================
+@import "base/mixins";
+
+// Підключення шрифтів ===========================================================================================================================================================================================================================================================================
+//&display=swap - додати при підключенні через плагін
+@import url(https://fonts.googleapis.com/css?family=Poppins:regular,600,700&display=swap);
+// Підключити, якщо є локальні файли шрифтів
+//@import "fonts/fonts";
+
+// Підключення іконкових шрифтів ==============================================================================================================================================================================================================================================================================
+// Підключити, якщо є файл іконкового шрифту
+//@import "fonts/icons";
+
+// ============================================================================================================================================================================================================================================================================================================================================================================================
+// Налаштування шаблону ============================================================================================================================================================================================================================================================================================================================================================================================
+// ============================================================================================================================================================================================================================================================================================================================================================================================
+
+// За замовчуванням шрифт ==============================================================================================================================================================================================================================================================================
+$fontFamily: "Poppins";
+$fontSize: rem(17); // де 14(px) - розмір шрифту за замовчуванням з макету
+
+// Основні кольори
+$mainColor: var(--primary); // Колір шрифту за замовчуванням
+
+// Палітра кольорів
+@import "base/colors-palette";
+
+// Налаштування адаптивної сітки ===============================================================================================================================================================================================================================================================================================
+
+// Мінімальна ширина сторінки
+$minWidth: 320;
+// Ширина полотна (макету)
+$maxWidth: 1440;
+// Ширина обмежуючого контейнера (0 = немає обмеження)
+$maxWidthContainer: 1200;
+// Загальний відступ у контейнера
+// (30 = по 15px ліворуч і праворуч, 0 = немає відступу)
+$containerPadding: 30;
+
+// Ширина спрацьовування першого брейкпоінту
+$containerWidth: $maxWidthContainer + $containerPadding;
+
+// Брейк-поїнти
+$pc: em($containerWidth); // ПК, ноутбуки, деякі планшети у горизонтальному положенні
+$tablet: em(991.98); // Планшети, деякі телефони в горизонтальному положенні
+$mobile: em(767.98); // Телефони L
+$mobileSmall: em(479.98); // Телефони S
+
+// Тип адаптива:
+// 1 = чуйність (у контейнера немає брейкпоінтів),
+// 2 = по брейк-поїнт (контейнер змінює свою ширину по брейк-поїнт)
+$responsiveType: 1;
+
+// ============================================================================================================================================================================================================================================================================================================================================================================================
+// ============================================================================================================================================================================================================================================================================================================================================================================================
+
+// Обнулення ============================================================================================================================================================================================== =============================================================================================== ===============================================================================================
+@import "base/null";
+
+// Стилі тега BODY ============================================================================================================================================================================================================================================================================================================================================================================================
+body {
+	color: var(--primary);
+	// Скролл заблоковано
+	.lock & {
+		overflow: hidden;
+		touch-action: none;
+		overscroll-behavior: none;
+	}
+	// Сайт завантажений
+	.loaded & {
+	}
+}
+// Оболонка wrapper ============================================================================================================================================================================================================================================================================================================================================================================================================================================
+.wrapper {
+	min-height: 100%;
+	display: flex;
+	flex-direction: column;
+	overflow: hidden;
+	@supports (overflow: clip) {
+		overflow: clip;
+	}
+	// Притискаємо footer
+	> main {
+	}
+	// Фікс для слайдерів
+	> * {
+		min-width: 0;
+	}
+}
+// Обмежуючий контейнер ======================================================================================================================================================================================================================
+/*
+(i) Стилі будуть застосовуватись до
+всіх класів, що містять *__container
+Наприклад header__container, main__container і т.п.
+Сніппет (HTML): cnt
+*/
+@if ($responsiveType==1) {
+	// Чуйна
+	[class*="__container"] {
+		@if ($maxWidthContainer>0) {
+			max-width: rem($containerWidth);
+			margin: 0 auto;
+		}
+		@if ($containerPadding>0) {
+			@if ($maxWidthContainer>0) {
+				padding: 0 rem(math.div($containerPadding, 2));
+			} @else {
+				@include adaptiveValue("padding-left", math.div($containerPadding, 2), 15);
+				@include adaptiveValue("padding-right", math.div($containerPadding, 2), 15);
+			}
+		}
+	}
+} @else {
+	// Брейк-поїнтами
+	[class*="__container"] {
+		margin: 0 auto;
+		@if ($maxWidthContainer>0) {
+			max-width: rem($containerWidth);
+		} @else {
+			@if ($containerPadding>0) {
+				padding: 0 rem(math.div($containerPadding, 2));
+			}
+		}
+		@media (max-width: $pc) {
+			max-width: rem(970);
+		}
+		@media (max-width: $tablet) {
+			max-width: rem(750);
+		}
+		@media (max-width: $mobile) {
+			max-width: none;
+			@if ($containerPadding>0 and $maxWidthContainer>0) {
+				padding: 0 rem(math.div($containerPadding, 2));
+			}
+		}
+	}
+}
+
+// Підключення базових стилів, шаблонів (заготівель) та допоміжних класів
+// Для підключення/вимкнення конкретних стилів дивись base.scss
+@import "base";
+
+// Підключення стилів загальних елементів проекту
+@import "common";
+
+// Підключення стилів окремих блоків
+@import "header";
+@import "footer";
+
+// Підключення стилів окремих сторінок
+@import "home";
+//======================================================================================
+// Pages
+.page {
+	flex: 1 1 auto;
+	// .page__main-block
+	&__main-block {
+	}
+	// .page__categories
+	&__categories {
+	}
+	// .page__delivery
+	&__delivery {
+	}
+	// .page__outlets
+	&__outlets {
+	}
+	// .page__start
+	&__start {
+	}
+	// .page__team
+	&__team {
+	}
+	// .page__get
+	&__get {
+	}
+	// .page__partners
+	&__partners {
+	}
+}
+//======================================================================================
+// Main-block
+.main-block {
+	position: relative;
+	// .main-block__container
+	&__container {
+		position: relative;
+		z-index: 2;
+		color: var(--secondary);
+		@include adaptiveValue("padding-top", 150, 100);
+		@include adaptiveValue("padding-bottom", 196, 20);
+	}
+	// .main-block__subtitle
+	&__subtitle {
+		font-weight: 700;
+		font-size: rem(26);
+		@include adaptiveValue("font-size", 26, 20);
+		line-height: math.div(39, 26);
+		&:not(:last-child) {
+			margin-bottom: rem(25);
+			@include adaptiveValue("margin-bottom", 25, 15);
+		}
+	}
+	// .main-block__title
+	&__title {
+		font-weight: 600;
+		font-size: rem(64);
+		@include adaptiveValue("font-size", 64, 40);
+		line-height: math.div(96, 64);
+		&:not(:last-child) {
+			@include adaptiveValue("margin-bottom", 25, 15);
+		}
+	}
+	// .main-block__offer
+	&__offer {
+	}
+	// .main-block__button
+	&__button {
+	}
+	// .main-block__image-ibg
+	&__image-ibg {
+		position: absolute;
+		width: 100%;
+		height: 100%;
+		top: 0;
+		left: 0;
+	}
+}
+.offer-main-block {
+	display: grid;
+	grid-template-columns: 1fr 2fr;
+	align-items: center;
+	@include adaptiveValue("gap", 30, 15);
+	max-width: rem(558);
+	&:not(:last-child) {
+		@include adaptiveValue("margin-bottom", 79, 25);
+	}
+	@media (max-width: $mobileSmall) {
+		grid-template-columns: 1fr;
+	}
+	// .offer-main-block__discount
+	&__discount {
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+		text-align: center;
+		border-radius: 50%;
+		@include adaptiveValue("width", 205, 160);
+		@include adaptiveValue("height", 205, 160);
+		background-color: var(--accent);
+		text-transform: uppercase;
+		font-weight: 700;
+		@include adaptiveValue("font-size", 64, 34);
+		line-height: math.div(96, 64);
+		span {
+			@include adaptiveValue("font-size", 32, 25);
+			line-height: math.div(48, 32);
+		}
+	}
+	// .offer-main-block__text
+	&__text {
+		font-weight: 600;
+		@include adaptiveValue("font-size", 36, 25);
+		line-height: math.div(54, 36);
+	}
+}
+//======================================================================================
+// Categories
+.categories {
+	padding-top: rem(20);
+	@include adaptiveValue("padding-top", 60, 20);
+	padding-bottom: rem(40);
+	// .categories__container
+	&__container {
+	}
+	// .categories__subtitle
+	&__subtitle {
+		text-align: center;
+	}
+	// .categories__title
+	&__title {
+		text-align: center;
+		&:not(:last-child) {
+			margin-bottom: rem(100);
+			@include adaptiveValue("margin-bottom", 100, 30);
+		}
+	}
+	// .categories__items
+	&__items {
+	}
+}
+.items-categories {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(rem(270), 1fr));
+	@include adaptiveValue("column-gap", 30, 15);
+	row-gap: rem(25);
+	align-items: center;
+	// .items-categories__item
+	&__item {
+		text-align: center;
+		transition: all 0.3s ease 0s;
+		@media (any-hover: hover) {
+			&:hover {
+				scale: 1.1;
+				box-shadow: 5px 30px 60px rgba(0, 0, 0, 0.08);
+			}
+		}
+	}
+	// .items-categories__icon
+	&__icon {
+		img {
+			max-width: 100%;
+		}
+		&:not(:last-child) {
+			margin-bottom: rem(15);
+		}
+	}
+	// .items-categories__title
+	&__title {
+		font-weight: 700;
+		@include adaptiveValue("font-size", 24, 20);
+		line-height: math.div(36, 24);
+		&:not(:last-child) {
+			margin-bottom: rem(15);
+		}
+	}
+	// .items-categories__text
+	&__text {
+		font-weight: 600;
+		@include adaptiveValue("font-size", 20, 16);
+		line-height: math.div(30, 20);
+		&:not(:last-child) {
+			margin-bottom: rem(15);
+		}
+	}
+}
+//======================================================================================
+// Delivery
+.delivery {
+	background-color: var(--accent);
+	padding-top: rem(40);
+	padding-bottom: rem(60);
+	@include adaptiveValue("padding-top", 40, 30);
+	@include adaptiveValue("padding-bottom", 60, 30);
+	// .delivery__container
+	&__container {
+	}
+	// .delivery__items
+	&__items {
+	}
+}
+.items-delivery {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(rem(250), 1fr));
+	grid-template-rows: auto;
+	align-items: start;
+	@include adaptiveValue("column-gap", 30, 15);
+	@include adaptiveValue("row-gap", 35, 20);
+	// .items-delivery__item
+	&__item {
+		justify-content: center;
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+		text-align: center;
+		color: var(--secondary);
+	}
+	// .items-delivery__icon
+	&__icon {
+		border-radius: 50%;
+		width: rem(115);
+		height: rem(115);
+		@include adaptiveValue("width", 115, 90);
+		@include adaptiveValue("height", 115, 90);
+		background-color: var(--secondary);
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		&:not(:last-child) {
+			margin-bottom: rem(40);
+			@include adaptiveValue("margin-bottom", 40, 15);
+		}
+		img {
+			max-width: 100%;
+		}
+	}
+	// .items-delivery__title
+	&__title {
+		max-width: rem(171);
+		font-weight: 700;
+		font-size: rem(20);
+		@include adaptiveValue("font-size", 20, 16);
+		line-height: math.div(30, 20);
+		&:not(:last-child) {
+			margin-bottom: rem(20);
+			@include adaptiveValue("margin-bottom", 20, 10);
+		}
+	}
+	// .items-delivery__text
+	&__text {
+		max-width: rem(380);
+		color: var(--secondary);
+	}
+}
+//======================================================================================
+// Outlets
+.outlets {
+	@include adaptiveValue("padding-top", 76, 30);
+	@include adaptiveValue("padding-bottom", 45, 30);
+	background-color: #f5f5f5;
+	// .outlets__container
+	&__container {
+	}
+	// .outlets__subtitle
+	&__subtitle {
+		text-align: center;
+		&:not(:last-child) {
+			margin-bottom: rem(5);
+		}
+	}
+	// .outlets__title
+	&__title {
+		text-align: center;
+		&:not(:last-child) {
+			@include adaptiveValue("margin-bottom", 25, 15);
+		}
+	}
+	// .outlets__items
+	&__items {
+	}
+}
+.items-outlets {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(rem(250), 1fr));
+	@include adaptiveValue("column-gap", 30, 15);
+	row-gap: rem(25);
+	// .items-outlets__item
+	&__item {
+		text-align: center;
+		transition: all 0.3s ease 0s;
+		@media (any-hover: hover) {
+			&:hover {
+				scale: 1.1;
+				box-shadow: 5px 30px 60px rgba(0, 0, 0, 0.08);
+			}
+		}
+	}
+	// .items-outlets__image
+	&__image-ibg_contain {
+		padding-bottom: percent(440, 380);
+		&:not(:last-child) {
+			margin-bottom: rem(20);
+		}
+		img {
+			border-radius: rem(10);
+		}
+	}
+	// .items-outlets__icon
+	&__icon {
+		&:not(:last-child) {
+			margin-bottom: rem(10);
+		}
+	}
+	// .items-outlets__address
+	&__address {
+		// text-align: center;
+		// max-width: rem(380);
+		font-weight: 700;
+		font-size: rem(20);
+		@include adaptiveValue("font-size", 20, 16);
+		line-height: math.div(30, 20);
+	}
+}
+//======================================================================================
+// Get started
+.start {
+	@include adaptiveValue("padding-top", 107, 30);
+	@include adaptiveValue("padding-bottom", 107, 30);
+	// .start__container
+	&__container {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		@include adaptiveValue("column-gap", 30, 15);
+		row-gap: rem(20);
+		@media (max-width: $tablet) {
+			flex-direction: column;
+		}
+	}
+	// .start__body
+	&__body {
+		flex: 0 1 50%;
+	}
+	// .start__subtitle
+	&__subtitle {
+		&:not(:last-child) {
+			margin-bottom: rem(5);
+		}
+	}
+	// .start__title
+	&__title {
+		&:not(:last-child) {
+			@include adaptiveValue("margin-bottom", 30, 10);
+		}
+		position: relative;
+		padding-bottom: rem(15);
+		&::after {
+			content: "";
+			position: absolute;
+			width: rem(175);
+			height: rem(5);
+			background-color: var(--accent);
+			bottom: 0;
+			left: 0;
+		}
+	}
+	// .start__slogan
+	&__slogan {
+		font-weight: 600;
+		font-size: rem(26);
+		@include adaptiveValue("font-size", 26, 18);
+		line-height: math.div(39, 26);
+		&:not(:last-child) {
+			margin-bottom: rem(15);
+		}
+	}
+	// .start__text
+	&__text {
+		&:not(:last-child) {
+			@include adaptiveValue("margin-bottom", 57, 15);
+		}
+	}
+	// .start__steps
+	&__steps {
+	}
+	// .start__image
+	&__image {
+		flex: 0 1 50%;
+		img {
+			max-width: 100%;
+		}
+		@media (max-width: $tablet) {
+			align-self: center;
+		}
+	}
+}
+.steps-start {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(rem(270), 1fr));
+	@include adaptiveValue("gap", 30, 15);
+	// .steps-start__item
+	&__item {
+	}
+	// .steps-start__image
+	&__image {
+		img {
+			max-width: 100%;
+		}
+		&:not(:last-child) {
+			margin-bottom: rem(15);
+		}
+	}
+	// .steps-start__body
+	&__body {
+	}
+	// .steps-start__title
+	&__title {
+		font-weight: 600;
+		font-size: rem(20);
+		@include adaptiveValue("font-size", 20, 16);
+		line-height: math.div(30, 20);
+		&:not(:last-child) {
+			margin-bottom: rem(8);
+		}
+	}
+	// .steps-start__text
+	&__text {
+	}
+}
+//======================================================================================
+// Our team
+.team {
+	@include adaptiveValue("padding-top", 47, 30);
+	@include adaptiveValue("padding-bottom", 65, 30);
+	// .team__container
+	&__container {
+		display: flex;
+		flex-direction: column;
+		// align-items: center;
+		// justify-content: center;
+	}
+	// .team__header
+	&__header {
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+		&:not(:last-child) {
+			margin-bottom: rem(109);
+			@include adaptiveValue("margin-bottom", 109, 20);
+		}
+		position: relative;
+		@include adaptiveValue("padding-bottom", 25, 15);
+		&::after {
+			content: "";
+			position: absolute;
+			width: rem(205);
+			height: rem(5);
+			bottom: 0;
+			left: auto;
+			right: auto;
+			background-color: var(--accent);
+		}
+	}
+	// .team__subtitle
+	&__subtitle {
+		text-align: center;
+		&:not(:last-child) {
+			margin-bottom: rem(5);
+		}
+	}
+	// .team__title
+	&__title {
+		text-align: center;
+	}
+	// .team__items
+	&__items {
+	}
+}
+.items-team {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(rem(270), 1fr));
+	@include adaptiveValue("column-gap", 30, 15);
+	row-gap: rem(25);
+	// .items-team__item
+	&__item {
+	}
+	// .items-team__image
+	&__image-ibg {
+		padding-bottom: percent(350, 277);
+		img {
+			filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
+		}
+		&:not(:last-child) {
+			margin-bottom: rem(37);
+			@include adaptiveValue("margin-bottom", 37, 15);
+		}
+	}
+	// .items-team__name
+	&__name {
+		text-transform: capitalize;
+		font-weight: 600;
+		@include adaptiveValue("font-size", 24, 18);
+		line-height: math.div(36, 24);
+		&:not(:last-child) {
+			margin-bottom: rem(10);
+		}
+	}
+	// .items-team__position
+	&__position {
+		text-transform: capitalize;
+		@include adaptiveValue("font-size", 20, 17);
+		line-height: math.div(30, 20);
+	}
+}
+//======================================================================================
+// Get
+.get {
+	@include adaptiveValue("padding-top", 65, 30);
+	@include adaptiveValue("padding-bottom", 130, 30);
+	background-color: var(--accent);
+	// .get__container
+	&__container {
+		display: flex;
+		justify-content: space-between;
+		@include adaptiveValue("column-gap", 30, 15);
+		row-gap: rem(20);
+		@media (max-width: em(826)) {
+			flex-direction: column;
+			align-items: center;
+			justify-content: center;
+			text-align: center;
+		}
+	}
+	// .get__body
+	&__body {
+		flex: 0 1 50%;
+		align-self: center;
+	}
+	// .get__title
+	&__title {
+		color: var(--secondary);
+		&:not(:last-child) {
+			@include adaptiveValue("margin-bottom", 32, 10);
+		}
+	}
+	// .get__text
+	&__text {
+		font-weight: 600;
+		@include adaptiveValue("font-size", 26, 20);
+		line-height: math.div(39, 26);
+		color: var(--secondary);
+		&:not(:last-child) {
+			@include adaptiveValue("margin-bottom", 73, 15);
+		}
+	}
+	// .get__download
+	&__download {
+	}
+	// .get__image
+	&__image {
+		flex: 0 1 50%;
+		@media (max-width: em(826)) {
+			display: flex;
+			flex-direction: column;
+			gap: rem(15);
+		}
+		img {
+			max-width: 100%;
+		}
+	}
+}
+.download-get {
+	display: flex;
+	flex-wrap: wrap;
+	gap: rem(15);
+	@media (max-width: em(826)) {
+		align-items: center;
+		justify-content: center;
+	}
+	// .download-get__icon
+	&__icon {
+		img {
+			max-width: 100%;
+		}
+		transition: all 0.3s ease 0s;
+		@media (any-hover: hover) {
+			&:hover {
+				opacity: 0.7;
+			}
+		}
+	}
+}
+//======================================================================================
+// Partners
+.partners {
+	@include adaptiveValue("padding-top", 75, 30);
+	@include adaptiveValue("padding-bottom", 75, 30);
+	// .partners__container
+	&__container {
+		// display: grid;
+		// grid-template-columns: repeat(auto-fit, minmax(rem(290), 1fr));
+	}
+	// .partners__items
+	&__items {
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: space-around;
+		// @include adaptiveValue("gap", 30, 20);
+		gap: rem(20);
+	}
+	// .partners__item
+	&__item {
+		img {
+			max-width: 100%;
+		}
+	}
+}
